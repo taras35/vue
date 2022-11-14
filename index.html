@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <style>
+    img {
+      display: block;
+      width: 100%;
+      max-width: 100px;
+      max-height: 100px;
+      border-radius: 50%;
+    }
+    td {
+      text-align: center;
+    }
+    tbody {
+      transition: all .3s ease-in-out;
+    }
+    .hide {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .copy-btn { 
+      background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Copy-outlined-circular-button.svg/1200px-Copy-outlined-circular-button.svg.png);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .black {
+      background-color: #323232;
+    }
+  </style>
+
+  <div id="app">
+    <table>
+      <caption>
+        Всего пользователей: {{countUser}}
+        <button type="button" v-on:click="hideUsers" v-tooltip.right="'Нажжмите, чтобы скрыть или показать всех пользователей'">{{condition ? 'Скрыть' : 'Показать' }}</button>
+      </caption>
+      <thead>
+        <tr>
+          <th>Имя</th>
+          <th>Фамилия</th>
+          <th>Отчество</th>
+          <th>Аватарка</th>
+        </tr>
+      </thead>
+      <tbody v-bind:class="{hide: !condition}">
+        <tr v-for="item of users" v-bind:key="item.name">
+          <td>
+            <button class="copy-btn" type="button" v-copy="item.name + ' ' + item.lastName + ' ' + item.patronymic"></button>
+          </td>
+          <td> {{item.name | upperCase}} </td>
+          <td> {{item.lastName | upperCase}} </td>
+          <td> {{item.patronymic | upperCase}} </td>
+          <td>
+            <img v-if="item.avatarImg" v-bind:src="item.avatarImg" alt="avatar">
+            <img v-else v-bind:src="defaultAvatar" alt="avatar">
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+
+      </tfoot>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/v-copy@0.1.0/dist/v-copy.js"></script>
+  <script src="https://unpkg.com/v-tooltip@^2.0.0"></script>
+  <!-- <script type="module">
+    import VTooltip from './node_modules/v-tooltip';
+  </script> -->
+  <script>
+    // Vue.use(VTooltip);
+    window.app = new Vue({
+      el: '#app',
+      data: function() {
+        return {
+          defaultAvatar: 'http://cdn.onlinewebfonts.com/svg/img_264570.png',
+          condition: true,
+          users: [
+            {
+              name: 'Denis',
+              lastName: 'Tararsov',
+              patronymic: 'Dmitrievich',
+              avatarImg: '',
+            },
+            {
+              name: 'Alexey',
+              lastName: 'Petrov',
+              patronymic: 'Vasilievich',
+              avatarImg: 'https://www.blast.hk/attachments/64805/',
+            },
+            {
+              name: 'Vasya',
+              lastName: 'Cialkovskiy',
+              patronymic: 'Andreevich',
+              avatarImg: 'https://www.youloveit.ru/uploads/posts/2020-04/1586360148_youloveit_ru_bill_gravity_falls_na_avu11.jpg',
+            },
+            {
+              name: 'Ivan',
+              lastName: 'Tverskoy',
+              patronymic: 'Vladimirovich',
+              avatarImg: 'https://vraki.net/sites/default/files/inline/images/2_3.png',
+            },
+            {
+              name: 'Konstantin',
+              lastName: 'Shirokov',
+              patronymic: 'Viktorovich',
+              avatarImg: 'https://cs13.pikabu.ru/post_img/big/2020/04/17/11/1587146536174888206.jpg',
+            },
+          ],
+          
+        }
+      },
+      methods: {
+        hideUsers: function() {
+          this.condition = !this.condition
+        }
+      },
+      filters: { 
+        upperCase: function(str) {
+          return str.toUpperCase()
+        }
+      },
+      computed: {
+        countUser: function() {
+          return this.users.length
+        },
+      }
+    })
+  </script>
+</body>
+</html>
